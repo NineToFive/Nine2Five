@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Nine2Five</string>
+    <string name="punch_in_btn_lbl">Punch In</string>
+    <string name="punch_out_btn_lbl">Punch Out</string>
 </resources>
