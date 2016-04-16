@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             float mProgress = (float)mShiftInMillis / mFullCircleInMins;
             if ((mShiftInMillis + 2000)  > mFullCircleInMins) {
                 mFullCircleInMins = mFullCircleInMins * 5;
-                mProgress = (float)mShiftInMillis / mFullCircleInMins;
+                mProgress = (float)(mShiftInMillis+2000) / mFullCircleInMins;
                 animate(mCircleProgressBar, 1f , 0f , mProgress, 2000);
             } else {
                 mCircleProgressBar.setProgress(mProgress);
@@ -112,8 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(final Animator animation) {
-                float tempProgress = (float)duration / mFullCircleInMins;
-                progressBar.setProgress(toProgress + tempProgress);
+                progressBar.setProgress(toProgress);
             }
 
             @Override
