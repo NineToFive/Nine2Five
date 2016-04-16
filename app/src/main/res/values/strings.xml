@@ -3,4 +3,13 @@
     <string name="punch_in_btn_lbl">Punch In</string>
     <string name="punch_out_btn_lbl">Punch Out</string>
     <string name="initial_zero_time">00:00:00</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_user_name">User name</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
 </resources>

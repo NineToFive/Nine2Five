@@ -1,5 +1,8 @@
 package com.chronos.nine2five;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,6 +12,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 
 /**
  * Created by user on 09/04/2016.
@@ -33,6 +37,8 @@ public class CircleProgressBar extends View {
 
     private int mProgressBackgroundColor = Color.parseColor("#E1BEE7");
     private int mProgressColor = Color.parseColor("#9C27B0");
+
+    private ObjectAnimator mProgressBarAnimator;
 
     private float mProgress = 0.0f;
     private float mRadius = 10;
@@ -177,6 +183,51 @@ public class CircleProgressBar extends View {
         bundle.putInt(PROGRESS_BAR_BACKGROUND_COLOR, mProgressBackgroundColor);
         bundle.putInt(CIRCLE_STROKE_WIDTH, mCircleStrokeWidth);
         return bundle;
+    }
+
+    public void animate(final float fromProgress,final float midProgress ,final float toProgress,final int duration) {
+
+        mProgressBarAnimator = ObjectAnimator.ofFloat(this, "progress",fromProgress,midProgress, toProgress);
+        mProgressBarAnimator.setInterpolator(new DecelerateInterpolator());
+        mProgressBarAnimator.setDuration(duration);
+
+        mProgressBarAnimator.addListener(new Animator.AnimatorListener() {
+
+            @Override
+            public void onAnimationCancel(final Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(final Animator animation) {
+                setProgress(toProgress );
+            }
+
+            @Override
+            public void onAnimationRepeat(final Animator animation) {
+            }
+
+            @Override
+            public void onAnimationStart(final Animator animation) {
+            }
+        });
+
+        mProgressBarAnimator.reverse();
+        mProgressBarAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(final ValueAnimator animation) {
+                setProgress((Float) animation.getAnimatedValue());
+            }
+        });
+        mProgressBarAnimator.start();
+    }
+
+    public void onDestroy() {
+        if (mProgressBarAnimator != null) {
+            if (mProgressBarAnimator.isRunning()) {
+                mProgressBarAnimator.end();
+            }
+        }
     }
 
 }
