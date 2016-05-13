@@ -17,13 +17,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button signInButton = (Button) findViewById(R.id.sign_in_button);
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), FragmentPagerActivity.class);
-                startActivity(intent);
-            }
-        });
+        if (signInButton != null) {
+            signInButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), FragmentPagerActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
     }
 
 
