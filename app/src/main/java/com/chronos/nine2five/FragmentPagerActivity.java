@@ -12,20 +12,21 @@ import com.chronos.nine2five.fragments.TaskScreenFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentPagerActivity extends AppCompatActivity {
+public class FragmentPagerActivity extends AppCompatActivity implements TaskScreenFragment.OnTaskSelectedListener{
 
     private static final String TAG = FragmentPagerActivity.class.getSimpleName();
 
     private ViewPager mFragmentPager;
+    private PagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_pager);
 
+        mPagerAdapter = new PagerAdapter(getSupportFragmentManager(), getList());
         mFragmentPager = (ViewPager)findViewById(R.id.fragment_pager);
-        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), getList());
-        mFragmentPager.setAdapter(pagerAdapter);
+        mFragmentPager.setAdapter(mPagerAdapter);
     }
 
     public List<Fragment> getList(){
@@ -35,5 +36,10 @@ public class FragmentPagerActivity extends AppCompatActivity {
         TaskScreenFragment mFragment1 = new TaskScreenFragment();
         mListOfFragments.add(mFragment1);
         return mListOfFragments;
+    }
+
+    @Override
+    public void setCurrentTask(String currentTask) {
+        ((PunchButtonFragment)mPagerAdapter.getItem(0)).setCurrentTask(currentTask);
     }
 }

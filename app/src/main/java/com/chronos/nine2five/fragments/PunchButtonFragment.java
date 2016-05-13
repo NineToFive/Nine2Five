@@ -99,4 +99,8 @@ public class PunchButtonFragment extends Fragment {
         mCircleProgressBar.onDestroy();
         super.onDestroy();
     }
+
+    public void setCurrentTask(String currentTask) {
+        mActiveTaskName.setText(currentTask);
+    }
 }

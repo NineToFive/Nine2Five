@@ -3,10 +3,14 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <ListView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/taskslistView"
-        android:layout_gravity="center_horizontal" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="task 1"
+        android:id="@+id/task_item"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="1dp"
+        android:padding="5dp"/>
+
 </LinearLayout>
