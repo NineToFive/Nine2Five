@@ -6,4 +6,6 @@
     <dimen name="elemnt_margin">10dp</dimen>
     <dimen name="elemnt_horizontal_margin">10dp</dimen>
     <dimen name="elemnt_vertical_margin">10dp</dimen>
+    <dimen name="elemnt_default_margin">2dp</dimen>
+    <dimen name="elemnt_default_padding">2dp</dimen>
 </resources>

@@ -63,6 +63,8 @@ public class TaskScreenFragment extends Fragment{
         super.onDestroyView();
     }
 
+
+
     public interface OnTaskSelectedListener {
         public void setCurrentTask(String currentTask);
     }

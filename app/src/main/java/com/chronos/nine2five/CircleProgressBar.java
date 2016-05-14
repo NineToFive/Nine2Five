@@ -229,5 +229,4 @@ public class CircleProgressBar extends View {
             }
         }
     }
-
 }
