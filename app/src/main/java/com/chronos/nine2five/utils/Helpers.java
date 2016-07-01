@@ -1,4 +1,4 @@
-package com.chronos.nine2five;
+package com.chronos.nine2five.utils;
 
 /**
  * Created by user on 16/04/2016.

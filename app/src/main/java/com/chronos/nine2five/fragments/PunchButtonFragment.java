@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.chronos.nine2five.CircleProgressBar;
-import com.chronos.nine2five.Helpers;
+import com.chronos.nine2five.utils.Helpers;
 import com.chronos.nine2five.R;
 
 /**

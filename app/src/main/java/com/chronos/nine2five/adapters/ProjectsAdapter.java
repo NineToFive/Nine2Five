@@ -7,8 +7,8 @@ import java.util.List;
 /**
  * Created by user on 01/07/2016.
  */
-public class TasksAdapter extends BaseItemsAdapter{
-    public TasksAdapter(Context context, List<String> objects) {
+public class ProjectsAdapter extends BaseItemsAdapter{
+    public ProjectsAdapter(Context context, List<String> objects) {
         super(context, objects);
     }
 }
