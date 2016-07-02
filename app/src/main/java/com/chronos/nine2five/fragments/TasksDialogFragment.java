@@ -1,7 +1,9 @@
 package com.chronos.nine2five.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.content.DialogInterface;
@@ -26,14 +28,25 @@ import java.util.List;
  */
 public class TasksDialogFragment extends DialogFragment {
 
+    private static final String TAG = TasksDialogFragment.class.getSimpleName();
+
     private static final String PROJECT_NAME = "projectName";
     private String mProjectName;
     private List<String> mTasksArray;
+    private int mSelectedTaskPosition = -1;
+    private TasksDialogListener mTasksDialogListener;
 
-    public static TasksDialogFragment newInstance(String selectedProject, List<String> tasksList) {
+    public interface TasksDialogListener {
+        public void onDialogPositiveClick(DialogFragment dialog);
+        public void onDialogNegativeClick(DialogFragment dialog);
+    }
+
+    public static TasksDialogFragment newInstance(String selectedProject, List<String> tasksList,
+                                                  int selectedTaskPosition) {
         TasksDialogFragment tasksDialogFragment = new TasksDialogFragment();
         tasksDialogFragment.setProjectName(selectedProject);
         tasksDialogFragment.setTasksArray(tasksList);
+        tasksDialogFragment.setSelectedTaskPosition(selectedTaskPosition);
         return tasksDialogFragment;
     }
 
@@ -44,21 +57,34 @@ public class TasksDialogFragment extends DialogFragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            // Instantiate the NoticeDialogListener so we can send events to the host
+            mTasksDialogListener = (TasksDialogListener) context;
+        } catch (ClassCastException e) {
+            // The activity doesn't implement the interface, throw exception
+            throw new ClassCastException(context.toString()
+                    + " must implement TasksDialogListener");
+        }
+    }
+
+    @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
 
-        final TasksAdapter adapter = new TasksAdapter(getActivity(), mTasksArray);
+        final TasksAdapter adapter = new TasksAdapter(getActivity(), mTasksArray, getSelectedTaskPosition());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.tasks_dialog_layout,null);
+        View dialogView = inflater.inflate(R.layout.tasks_dialog_layout, null);
         ListView tasksListView = (ListView) dialogView.findViewById(R.id.taskslistView);
         EditText taskToSearch = (EditText) dialogView.findViewById(R.id.editTextTaskSearch);
         tasksListView.setAdapter(adapter);
 
-        //tasksListView.setOnItemClickListener();
         taskToSearch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -66,68 +92,33 @@ public class TasksDialogFragment extends DialogFragment {
             }
 
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {
+            }
         });
-
 
         dialogBuilder.setTitle(getProjectName() + " - Please select a task");
         dialogBuilder.setView(dialogView);
 
-//        dialogBuilder.setAdapter(adapter, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                Toast.makeText(getActivity(), mTasksArray.get(which) + " was selected", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
+        // Buttons
+        dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                setSelectedTaskPosition(adapter.getSelectedItemPosition());
+                mTasksDialogListener.onDialogPositiveClick(TasksDialogFragment.this);
+                //Toast.makeText(getActivity(), "OK was pressed", Toast.LENGTH_SHORT).show();
+            }
+        });
         dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getActivity(), "Cancel was pressed", Toast.LENGTH_SHORT).show();
+                mTasksDialogListener.onDialogNegativeClick(TasksDialogFragment.this);
+                //Toast.makeText(getActivity(), "Cancel was pressed", Toast.LENGTH_SHORT).show();
             }
         });
 
         return dialogBuilder.create();
 
-//        return new AlertDialog.Builder(getActivity())
-//                .setTitle(getProjectName() + " - Please select a task")
-//                .setView(inflater.inflate(R.layout.tasks_dialog_layout, null))
-////                .setItems(Constants.TASKS_LIST, new DialogInterface.OnClickListener() {
-////                    @Override
-////                    public void onClick(DialogInterface dialog, int which) {
-////                        Toast.makeText(getActivity(), Constants.TASKS_LIST[which] + " was selected", Toast.LENGTH_SHORT).show();
-////                    }
-////
-////                })
-//                .setAdapter(adapter, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        Toast.makeText(getActivity(), mTasksArray.get(which) + " was selected", Toast.LENGTH_SHORT).show();
-//                    }
-//                })
-////                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-////                    @Override
-////                    public void onClick(DialogInterface dialog, int which) {
-////                        Toast.makeText(getActivity(), "OK was pressed", Toast.LENGTH_SHORT).show();
-////                    }
-////                })
-//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        Toast.makeText(getActivity(), "Cancel was pressed", Toast.LENGTH_SHORT).show();
-//                    }
-//                })
-//                .create();
-
     }
-
-//    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        outState.putString(PROJECT_NAME, getProjectName());
-//    }
-
-
 
     public String getProjectName() {
         return mProjectName;
@@ -143,6 +134,14 @@ public class TasksDialogFragment extends DialogFragment {
 
     public void setTasksArray(List<String> mTasksArray) {
         this.mTasksArray = mTasksArray;
+    }
+
+    public int getSelectedTaskPosition() {
+        return mSelectedTaskPosition;
+    }
+
+    public void setSelectedTaskPosition(int mSelectedTaskPosition) {
+        this.mSelectedTaskPosition = mSelectedTaskPosition;
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.chronos.nine2five.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -23,7 +24,7 @@ import java.util.List;
 /**
  * Created by user on 16/04/2016.
  */
-public class ProjectsScreenFragment extends Fragment{
+public class ProjectsScreenFragment extends Fragment  {
     private static final String TAG = ProjectsScreenFragment.class.getSimpleName();
     private List<String> mTasksArray = new ArrayList<>();
     private List<String> mProjectsArray = new ArrayList<>();
@@ -58,7 +59,7 @@ public class ProjectsScreenFragment extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedProject = parent.getItemAtPosition(position).toString();
-                TasksDialogFragment tasksDialogFragment = TasksDialogFragment.newInstance(selectedProject, mTasksArray);
+                TasksDialogFragment tasksDialogFragment = TasksDialogFragment.newInstance(selectedProject, mTasksArray,1);
                 tasksDialogFragment.show(getFragmentManager(), Constants.TASKS_DIALOG);
             }
         });
@@ -91,7 +92,6 @@ public class ProjectsScreenFragment extends Fragment{
     public interface OnTaskSelectedListener {
         public void setCurrentTask(String currentTask);
     }
-
 
     private void setTasksList() {
         mTasksArray.addAll(Arrays.asList(Constants.TASKS_LIST));
