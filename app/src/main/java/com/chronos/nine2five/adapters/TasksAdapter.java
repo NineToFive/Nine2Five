@@ -8,17 +8,18 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.chronos.nine2five.R;
+import com.chronos.nine2five.datastructures.ProjectTask;
 
 import java.util.List;
 
 /**
  * Created by user on 01/07/2016.
  */
-public class TasksAdapter extends BaseItemsAdapter{
+public class TasksAdapter extends BaseItemsAdapter<ProjectTask>{
 
     private int mSelectedItemPosition = -1;
 
-    public TasksAdapter(Context context, List<String> objects, int selectedItemPosition) {
+    public TasksAdapter(Context context, List<ProjectTask> objects, int selectedItemPosition) {
         super(context, objects);
         setSelectedItemPosition(selectedItemPosition);
     }
@@ -31,8 +32,8 @@ public class TasksAdapter extends BaseItemsAdapter{
         TextView itemView = (TextView)convertView.findViewById(R.id.task_item_text);
         RadioButton radioButton = (RadioButton) convertView.findViewById(R.id.task_item_rb);
 
-        final String item = getItem(position);
-        itemView.setText(item);
+        ProjectTask item = getItem(position);
+        itemView.setText(item.getDescription());
 
         if (mSelectedItemPosition == position) {
             radioButton.setChecked(true);

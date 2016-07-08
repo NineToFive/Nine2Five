@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import com.chronos.nine2five.R;
 import com.chronos.nine2five.adapters.TasksAdapter;
+import com.chronos.nine2five.datastructures.Project;
+import com.chronos.nine2five.datastructures.ProjectTask;
 import com.chronos.nine2five.utils.Constants;
 
 import java.util.List;
@@ -32,7 +34,7 @@ public class TasksDialogFragment extends DialogFragment {
 
     private static final String PROJECT_NAME = "projectName";
     private String mProjectName;
-    private List<String> mTasksArray;
+    private List<ProjectTask> mTasksArray;
     private int mSelectedTaskPosition = -1;
     private TasksDialogListener mTasksDialogListener;
 
@@ -41,12 +43,11 @@ public class TasksDialogFragment extends DialogFragment {
         public void onDialogNegativeClick(DialogFragment dialog);
     }
 
-    public static TasksDialogFragment newInstance(String selectedProject, List<String> tasksList,
-                                                  int selectedTaskPosition) {
+    public static TasksDialogFragment newInstance(Project selectedProject) {
         TasksDialogFragment tasksDialogFragment = new TasksDialogFragment();
-        tasksDialogFragment.setProjectName(selectedProject);
-        tasksDialogFragment.setTasksArray(tasksList);
-        tasksDialogFragment.setSelectedTaskPosition(selectedTaskPosition);
+        tasksDialogFragment.setProjectName(selectedProject.getDescription());
+        tasksDialogFragment.setTasksArray(selectedProject.getTasksList());
+        tasksDialogFragment.setSelectedTaskPosition(selectedProject.getCurrentTaskPosition());
         return tasksDialogFragment;
     }
 
@@ -128,11 +129,11 @@ public class TasksDialogFragment extends DialogFragment {
         this.mProjectName = mProjectName;
     }
 
-    public List<String> getTasksArray() {
+    public List<ProjectTask> getTasksArray() {
         return mTasksArray;
     }
 
-    public void setTasksArray(List<String> mTasksArray) {
+    public void setTasksArray(List<ProjectTask> mTasksArray) {
         this.mTasksArray = mTasksArray;
     }
 
