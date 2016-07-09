@@ -1,6 +1,5 @@
 package com.chronos.nine2five.fragments;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -12,16 +11,13 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.chronos.nine2five.R;
 import com.chronos.nine2five.adapters.TasksAdapter;
 import com.chronos.nine2five.datastructures.Project;
 import com.chronos.nine2five.datastructures.ProjectTask;
-import com.chronos.nine2five.utils.Constants;
 
 import java.util.List;
 
@@ -34,6 +30,7 @@ public class TasksDialogFragment extends DialogFragment {
 
     private static final String PROJECT_NAME = "projectName";
     private String mProjectName;
+    private int mSelectedProjectPosittion = -1;
     private List<ProjectTask> mTasksArray;
     private int mSelectedTaskPosition = -1;
     private TasksDialogListener mTasksDialogListener;
@@ -43,11 +40,12 @@ public class TasksDialogFragment extends DialogFragment {
         public void onDialogNegativeClick(DialogFragment dialog);
     }
 
-    public static TasksDialogFragment newInstance(Project selectedProject) {
+    public static TasksDialogFragment newInstance(int selectedProjectPosittion, Project selectedProject) {
         TasksDialogFragment tasksDialogFragment = new TasksDialogFragment();
         tasksDialogFragment.setProjectName(selectedProject.getDescription());
         tasksDialogFragment.setTasksArray(selectedProject.getTasksList());
         tasksDialogFragment.setSelectedTaskPosition(selectedProject.getCurrentTaskPosition());
+        tasksDialogFragment.setSelectedProjectPosittion(selectedProjectPosittion);
         return tasksDialogFragment;
     }
 
@@ -125,28 +123,37 @@ public class TasksDialogFragment extends DialogFragment {
         return mProjectName;
     }
 
-    public void setProjectName(String mProjectName) {
-        this.mProjectName = mProjectName;
+    public void setProjectName(String projectName) {
+        this.mProjectName = projectName;
     }
 
     public List<ProjectTask> getTasksArray() {
         return mTasksArray;
     }
 
-    public void setTasksArray(List<ProjectTask> mTasksArray) {
-        this.mTasksArray = mTasksArray;
+    public void setTasksArray(List<ProjectTask> tasksArray) {
+        this.mTasksArray = tasksArray;
     }
 
     public int getSelectedTaskPosition() {
         return mSelectedTaskPosition;
     }
 
-    public void setSelectedTaskPosition(int mSelectedTaskPosition) {
-        this.mSelectedTaskPosition = mSelectedTaskPosition;
+    public int getSelectedProjectPosittion() {
+        return mSelectedProjectPosittion;
+    }
+
+    public void setSelectedTaskPosition(int selectedTaskPosition) {
+        this.mSelectedTaskPosition = selectedTaskPosition;
+    }
+
+    public void setSelectedProjectPosittion(int selectedProjectPosittion) {
+        this.mSelectedProjectPosittion = selectedProjectPosittion;
     }
 
     @Override
     public void onDestroyView() {
+        mTasksDialogListener = null;
         if (getDialog() != null && getRetainInstance()) {
             getDialog().setDismissMessage(null);
         }

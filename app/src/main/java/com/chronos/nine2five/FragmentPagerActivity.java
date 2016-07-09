@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FragmentPagerActivity extends AppCompatActivity implements ProjectsScreenFragment.OnTaskSelectedListener,
-        TasksDialogFragment.TasksDialogListener{
+        TasksDialogFragment.TasksDialogListener {
 
     private static final String TAG = FragmentPagerActivity.class.getSimpleName();
     private static final int PUNCH_BUTTON_FRAG_POSITION = 0;
@@ -29,46 +29,55 @@ public class FragmentPagerActivity extends AppCompatActivity implements Projects
     private ViewPager mFragmentPager;
     private PagerAdapter mPagerAdapter;
 
+    //// TODO: 09/07/2016 need to enhance the project list to a better data structure
     private List<Project> mProjectsArray = new ArrayList<>();
+    private int mCurrentProjectPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_pager);
-
+        mCurrentProjectPosition = 0;
         setProjectsList();
 
         mPagerAdapter = new PagerAdapter(getSupportFragmentManager(), getList());
-        mFragmentPager = (ViewPager)findViewById(R.id.fragment_pager);
-        mFragmentPager.setAdapter(mPagerAdapter);
+        mFragmentPager = (ViewPager) findViewById(R.id.fragment_pager);
+        if (mPagerAdapter != null) {
+            mFragmentPager.setAdapter(mPagerAdapter);
+        }
     }
 
-    public List<Fragment> getList(){
-        List<Fragment> mListOfFragments = new ArrayList<Fragment>();
+    public List<Fragment> getList() {
+        List<Fragment> mListOfFragments = new ArrayList<>();
         PunchButtonFragment mFragment0 = new PunchButtonFragment();
         mListOfFragments.add(mFragment0);
-        ProjectsScreenFragment mFragment1 = ProjectsScreenFragment.newInstance(mProjectsArray);
+        ProjectsScreenFragment mFragment1 = ProjectsScreenFragment.newInstance(mProjectsArray, mCurrentProjectPosition);
         mListOfFragments.add(mFragment1);
         return mListOfFragments;
     }
 
     @Override
     public void setCurrentTask(String currentTask) {
-        ((PunchButtonFragment)mPagerAdapter.getItem(0)).setCurrentTask(currentTask);
+        ((PunchButtonFragment) mPagerAdapter.getItem(PUNCH_BUTTON_FRAG_POSITION)).setCurrentTask(currentTask);
     }
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-        //Project selectedProject = dialog.
-        int i = ((TasksDialogFragment)dialog).getSelectedTaskPosition();
-        //mPagerAdapter.getItem(PROJECTS_SCREEN_FRAG_POSITION)
-        mProjectsArray.get(0).setCurrentTaskPosition(i);
-        Toast.makeText(this, i + " was selected", Toast.LENGTH_SHORT).show();
+        mCurrentProjectPosition = ((TasksDialogFragment) dialog).getSelectedProjectPosittion();
+        int currentTaskPosition = ((TasksDialogFragment) dialog).getSelectedTaskPosition();
+        Project project = mProjectsArray.get(mCurrentProjectPosition);
+        project.setCurrentTaskPosition(currentTaskPosition);
+        ((ProjectsScreenFragment) mPagerAdapter.getItem(PROJECTS_SCREEN_FRAG_POSITION))
+                .setCurrentProjectPosition(mCurrentProjectPosition, true);
+
+        String projectName = project.getDescription();
+        String taskName = project.getTask(currentTaskPosition).getDescription();
+        setCurrentTask(projectName + "\n" + taskName);
     }
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
-        Toast.makeText(this,  "Cancel was selected", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Cancel was selected", Toast.LENGTH_SHORT).show();
     }
 
     private void setProjectsList() {

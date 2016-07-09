@@ -2,7 +2,6 @@ package com.chronos.nine2five.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,11 +15,8 @@ import android.widget.ListView;
 import com.chronos.nine2five.R;
 import com.chronos.nine2five.adapters.ProjectsAdapter;
 import com.chronos.nine2five.datastructures.Project;
-import com.chronos.nine2five.datastructures.ProjectTask;
 import com.chronos.nine2five.utils.Constants;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,14 +25,16 @@ import java.util.List;
 public class ProjectsScreenFragment extends Fragment {
     private static final String TAG = ProjectsScreenFragment.class.getSimpleName();
     private List<Project> mProjectsArray;
+    private int mCurrentProjectPosition;
     private ListView mTasksListView;
     private EditText mEditTextProjectSearch;
     private OnTaskSelectedListener mCallBack;
-    private ProjectsAdapter mArrayAdapter;
+    private ProjectsAdapter mProjectsAdapter;
 
-    public static ProjectsScreenFragment newInstance(List<Project> theListOfProjects) {
+    public static ProjectsScreenFragment newInstance(List<Project> theListOfProjects, int currentProjectPosition) {
         ProjectsScreenFragment projectsScreenFragment = new ProjectsScreenFragment();
         projectsScreenFragment.setProjectsArray(theListOfProjects);
+        projectsScreenFragment.setCurrentProjectPosition(currentProjectPosition, false);
         return projectsScreenFragment;
     }
 
@@ -55,15 +53,15 @@ public class ProjectsScreenFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View mView = inflater.inflate(R.layout.projects_screen_layout, container, false);
 
-        mArrayAdapter = new ProjectsAdapter(getContext(), mProjectsArray);
+        mProjectsAdapter = new ProjectsAdapter(getContext(), mProjectsArray, getCurrentProjectPosition());
         mTasksListView = (ListView) mView.findViewById(R.id.projectslistView);
-        mTasksListView.setAdapter(mArrayAdapter);
+        mTasksListView.setAdapter(mProjectsAdapter);
 
         mTasksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TasksDialogFragment tasksDialogFragment =
-                        TasksDialogFragment.newInstance(mProjectsArray.get(position));
+                        TasksDialogFragment.newInstance(position, mProjectsArray.get(position));
                 tasksDialogFragment.show(getFragmentManager(), Constants.TASKS_DIALOG);
             }
         });
@@ -76,7 +74,7 @@ public class ProjectsScreenFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mArrayAdapter.getFilter().filter(s);
+                mProjectsAdapter.getFilter().filter(s);
             }
 
             @Override
@@ -89,6 +87,18 @@ public class ProjectsScreenFragment extends Fragment {
 
     public void setProjectsArray(List<Project> projectsArray) {
         this.mProjectsArray = projectsArray;
+    }
+
+    public int getCurrentProjectPosition() {
+        return mCurrentProjectPosition;
+    }
+
+    public void setCurrentProjectPosition(int currentProjectPosition, boolean isNotify) {
+        this.mCurrentProjectPosition = currentProjectPosition;
+        if (isNotify && mProjectsAdapter != null) {
+            mProjectsAdapter.setSelectedItemPosition(currentProjectPosition);
+            mProjectsAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override

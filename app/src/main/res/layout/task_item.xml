@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:clickable="false"
         android:focusable="false"
-        android:gravity="center_vertical"></RadioButton>
+        android:gravity="center_vertical"/>
 
 
 </LinearLayout>

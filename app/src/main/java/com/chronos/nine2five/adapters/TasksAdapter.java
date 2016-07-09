@@ -17,8 +17,6 @@ import java.util.List;
  */
 public class TasksAdapter extends BaseItemsAdapter<ProjectTask>{
 
-    private int mSelectedItemPosition = -1;
-
     public TasksAdapter(Context context, List<ProjectTask> objects, int selectedItemPosition) {
         super(context, objects);
         setSelectedItemPosition(selectedItemPosition);
@@ -53,14 +51,4 @@ public class TasksAdapter extends BaseItemsAdapter<ProjectTask>{
 
         return convertView;
     }
-
-    public int getSelectedItemPosition() {
-        return mSelectedItemPosition;
-    }
-
-    public void setSelectedItemPosition(int mSelectedItempPosition) {
-        this.mSelectedItemPosition = mSelectedItempPosition;
-    }
-
-
 }

@@ -6,6 +6,7 @@ import java.util.Date;
  * Created by user on 08/07/2016.
  */
 public abstract class BaseClass {
+    private int mId;
     private String mCode;
     private String mDescription;
     private Date mExpiryDate;
@@ -39,5 +40,6 @@ public abstract class BaseClass {
     public void setExpiryDate(Date mExpiryDate) {
         this.mExpiryDate = mExpiryDate;
     }
+
 }
 

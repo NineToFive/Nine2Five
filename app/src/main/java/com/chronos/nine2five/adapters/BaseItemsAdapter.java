@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.chronos.nine2five.R;
 import com.chronos.nine2five.datastructures.BaseClass;
-import com.chronos.nine2five.datastructures.Project;
 
 import java.util.List;
 
@@ -18,20 +17,23 @@ import java.util.List;
  */
 public class BaseItemsAdapter<T> extends ArrayAdapter<T> {
 
+    protected int mSelectedItemPosition ;
+
     public BaseItemsAdapter(Context context, List<T> objects) {
         super(context, 0, objects);
+        this.mSelectedItemPosition = 0;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        T item = getItem(position);
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
-        }
-
-        TextView itemView = (TextView)convertView.findViewById(R.id.item);
-        itemView.setText(((BaseClass)item).getDescription());
-
         return convertView;
+    }
+
+    public int getSelectedItemPosition() {
+        return mSelectedItemPosition;
+    }
+
+    public void setSelectedItemPosition(int mSelectedItempPosition) {
+        this.mSelectedItemPosition = mSelectedItempPosition;
     }
 }
