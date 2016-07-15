@@ -17,6 +17,8 @@ import java.util.List;
  */
 public class TasksAdapter extends BaseItemsAdapter<ProjectTask>{
 
+    private ViewHold holder;
+
     public TasksAdapter(Context context, List<ProjectTask> objects, int selectedItemPosition) {
         super(context, objects);
         setSelectedItemPosition(selectedItemPosition);
@@ -26,17 +28,21 @@ public class TasksAdapter extends BaseItemsAdapter<ProjectTask>{
     public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.task_item, parent, false);
+            holder = new ViewHold();
+            holder.itemView = (TextView)convertView.findViewById(R.id.task_item_text);
+            holder.radioButton = (RadioButton) convertView.findViewById(R.id.task_item_rb);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHold) convertView.getTag();
         }
-        TextView itemView = (TextView)convertView.findViewById(R.id.task_item_text);
-        RadioButton radioButton = (RadioButton) convertView.findViewById(R.id.task_item_rb);
 
         ProjectTask item = getItem(position);
-        itemView.setText(item.getDescription());
+        holder.itemView.setText(item.getDescription());
 
         if (mSelectedItemPosition == position) {
-            radioButton.setChecked(true);
+            holder.radioButton.setChecked(true);
         } else {
-            radioButton.setChecked(false);
+            holder.radioButton.setChecked(false);
         }
 
         convertView.setOnClickListener(new View.OnClickListener()
@@ -50,5 +56,10 @@ public class TasksAdapter extends BaseItemsAdapter<ProjectTask>{
         });
 
         return convertView;
+    }
+
+    private static class ViewHold {
+        TextView itemView;
+        RadioButton radioButton;
     }
 }

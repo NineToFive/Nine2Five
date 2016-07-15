@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.chronos.nine2five.R;
@@ -18,6 +19,8 @@ import java.util.List;
  */
 public class ProjectsAdapter extends BaseItemsAdapter<Project>{
 
+    private ViewHold holder;
+
     public ProjectsAdapter(Context context, List<Project> objects,int selectedItemPosition) {
         super(context, objects);
         setSelectedItemPosition(selectedItemPosition);
@@ -27,20 +30,27 @@ public class ProjectsAdapter extends BaseItemsAdapter<Project>{
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.project_item, parent, false);
+            holder = new ViewHold();
+            holder.projectView = (TextView)convertView.findViewById(R.id.project_item);
+            holder.projectCheckBox = (CheckBox)convertView.findViewById(R.id.projectCheckBox);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHold) convertView.getTag();
         }
 
         Project project = getItem(position);
-        TextView projectView = (TextView)convertView.findViewById(R.id.project_item);
-        CheckBox projectCheckBox = (CheckBox)convertView.findViewById(R.id.projectCheckBox);
-
-        projectView.setText(project.getDescription());
+        holder.projectView.setText(project.getDescription());
 
         if (mSelectedItemPosition == position) {
-            projectCheckBox.setChecked(true);
+            holder.projectCheckBox.setChecked(true);
         } else {
-            projectCheckBox.setChecked(false);
+            holder.projectCheckBox.setChecked(false);
         }
 
         return convertView;
+    }
+    private static class ViewHold {
+        TextView projectView;
+        CheckBox projectCheckBox;
     }
 }

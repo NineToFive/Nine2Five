@@ -8,6 +8,7 @@ public class ProjectTask extends BaseClass {
     public ProjectTask(String mCode, String mDescription) {
         super(mCode, mDescription);
     }
+
     public ProjectTask(ProjectTask task) {
         super(task.getCode(), task.getDescription());
     }

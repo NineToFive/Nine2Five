@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.chronos.nine2five.R;
@@ -36,4 +37,5 @@ public class BaseItemsAdapter<T> extends ArrayAdapter<T> {
     public void setSelectedItemPosition(int mSelectedItempPosition) {
         this.mSelectedItemPosition = mSelectedItempPosition;
     }
+
 }

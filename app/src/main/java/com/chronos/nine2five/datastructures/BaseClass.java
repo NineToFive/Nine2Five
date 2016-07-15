@@ -41,5 +41,9 @@ public abstract class BaseClass {
         this.mExpiryDate = mExpiryDate;
     }
 
+    @Override
+    public String toString() {
+        return getDescription();
+    }
 }
 
