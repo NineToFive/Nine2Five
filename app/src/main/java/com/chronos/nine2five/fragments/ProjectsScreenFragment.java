@@ -25,18 +25,16 @@ import java.util.List;
 public class ProjectsScreenFragment extends Fragment {
     private static final String TAG = ProjectsScreenFragment.class.getSimpleName();
     private List<Project> mProjectsArray;
-    private int mCurrentProjectPosition;
-    private ListView mTasksListView;
-    private EditText mEditTextProjectSearch;
     private OnTaskSelectedListener mCallBack;
     private ProjectsAdapter mProjectsAdapter;
+    private Project mActiveProject;
 
-    public static ProjectsScreenFragment newInstance(List<Project> theListOfProjects, int currentProjectPosition) {
+    public static ProjectsScreenFragment newInstance(List<Project> theListOfProjects) {
         ProjectsScreenFragment projectsScreenFragment = new ProjectsScreenFragment();
         projectsScreenFragment.setProjectsArray(theListOfProjects);
-        projectsScreenFragment.setCurrentProjectPosition(currentProjectPosition, false);
         return projectsScreenFragment;
     }
+
 
     @Override
     public void onAttach(Context context) {
@@ -53,20 +51,20 @@ public class ProjectsScreenFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View mView = inflater.inflate(R.layout.projects_screen_layout, container, false);
 
-        mProjectsAdapter = new ProjectsAdapter(getContext(), mProjectsArray, getCurrentProjectPosition());
-        mTasksListView = (ListView) mView.findViewById(R.id.projectslistView);
+        mProjectsAdapter = new ProjectsAdapter(getContext(), mProjectsArray);
+        ListView mTasksListView = (ListView) mView.findViewById(R.id.projectslistView);
         mTasksListView.setAdapter(mProjectsAdapter);
 
         mTasksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TasksDialogFragment tasksDialogFragment =
-                        TasksDialogFragment.newInstance(position, mProjectsArray.get(position));
+                        TasksDialogFragment.newInstance(mProjectsAdapter.getItem(position));
                 tasksDialogFragment.show(getFragmentManager(), Constants.TASKS_DIALOG);
             }
         });
 
-        mEditTextProjectSearch = (EditText) mView.findViewById(R.id.editTextProjectSearch);
+        EditText mEditTextProjectSearch = (EditText) mView.findViewById(R.id.editTextProjectSearch);
         mEditTextProjectSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -89,15 +87,9 @@ public class ProjectsScreenFragment extends Fragment {
         this.mProjectsArray = projectsArray;
     }
 
-    public int getCurrentProjectPosition() {
-        return mCurrentProjectPosition;
-    }
-
-    public void setCurrentProjectPosition(int currentProjectPosition, boolean isNotify) {
-        this.mCurrentProjectPosition = currentProjectPosition;
-        if (isNotify && mProjectsAdapter != null) {
-            mProjectsAdapter.setSelectedItemPosition(currentProjectPosition);
-            mProjectsAdapter.notifyDataSetChanged();
+    public void clearAllProjectsCheckBoxes() {
+        for (Project project : mProjectsArray) {
+            project.setActive(false);
         }
     }
 
@@ -112,4 +104,16 @@ public class ProjectsScreenFragment extends Fragment {
         public void setCurrentTask(String currentTask);
     }
 
+    public Project getActiveProject() {
+        return mActiveProject;
+    }
+
+    public void setActiveProject(Project activeProject) {
+        if (this.mActiveProject != activeProject) {
+            this.mActiveProject = activeProject;
+            clearAllProjectsCheckBoxes();
+            this.mActiveProject.setActive(true);
+            mProjectsAdapter.notifyDataSetChanged();
+        }
+    }
 }

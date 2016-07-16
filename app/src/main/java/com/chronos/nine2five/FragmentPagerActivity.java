@@ -31,13 +31,11 @@ public class FragmentPagerActivity extends AppCompatActivity implements Projects
 
     //// TODO: 09/07/2016 need to enhance the project list to a better data structure
     private List<Project> mProjectsArray = new ArrayList<>();
-    private int mCurrentProjectPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_pager);
-        mCurrentProjectPosition = 0;
         setProjectsList();
 
         mPagerAdapter = new PagerAdapter(getSupportFragmentManager(), getList());
@@ -51,7 +49,7 @@ public class FragmentPagerActivity extends AppCompatActivity implements Projects
         List<Fragment> mListOfFragments = new ArrayList<>();
         PunchButtonFragment mFragment0 = new PunchButtonFragment();
         mListOfFragments.add(mFragment0);
-        ProjectsScreenFragment mFragment1 = ProjectsScreenFragment.newInstance(mProjectsArray, mCurrentProjectPosition);
+        ProjectsScreenFragment mFragment1 = ProjectsScreenFragment.newInstance(mProjectsArray);
         mListOfFragments.add(mFragment1);
         return mListOfFragments;
     }
@@ -63,16 +61,13 @@ public class FragmentPagerActivity extends AppCompatActivity implements Projects
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-        mCurrentProjectPosition = ((TasksDialogFragment) dialog).getSelectedProjectPosittion();
-        int currentTaskPosition = ((TasksDialogFragment) dialog).getSelectedTaskPosition();
-        Project project = mProjectsArray.get(mCurrentProjectPosition);
-        project.setCurrentTaskPosition(currentTaskPosition);
-        ((ProjectsScreenFragment) mPagerAdapter.getItem(PROJECTS_SCREEN_FRAG_POSITION))
-                .setCurrentProjectPosition(mCurrentProjectPosition, true);
-
+        Project project = ((TasksDialogFragment) dialog).getProject();
         String projectName = project.getDescription();
-        String taskName = project.getTask(currentTaskPosition).getDescription();
+        String taskName = project.getActiveTask().getDescription();
         setCurrentTask(projectName + "\n" + taskName);
+
+        ((ProjectsScreenFragment) mPagerAdapter.getItem(PROJECTS_SCREEN_FRAG_POSITION))
+                .setActiveProject(project);
     }
 
     @Override

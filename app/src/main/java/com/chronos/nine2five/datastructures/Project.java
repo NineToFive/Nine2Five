@@ -1,5 +1,8 @@
 package com.chronos.nine2five.datastructures;
 
+import android.nfc.Tag;
+import android.util.Log;
+
 import java.util.List;
 
 /**
@@ -7,28 +10,30 @@ import java.util.List;
  */
 public class Project extends BaseClass {
 
-    private int mCurrentTaskPosition;
+    private static final String TAG = Project.class.getSimpleName();
+
     private List<ProjectTask> mTasksList;
+    private ProjectTask mActiveTask;
 
-    public Project(String mCode, String mDescription, int mCurrentTaskPosition, List<ProjectTask> mTasksList) {
+    public Project(String mCode, String mDescription, List<ProjectTask> tasksList) {
         super(mCode, mDescription);
-        this.mCurrentTaskPosition = mCurrentTaskPosition;
-        this.mTasksList = mTasksList;
-    }
-
-    public int getCurrentTaskPosition() {
-        return mCurrentTaskPosition;
-    }
-
-    public void setCurrentTaskPosition(int mCurrentTaskPosition) {
-        this.mCurrentTaskPosition = mCurrentTaskPosition;
+        this.mTasksList = tasksList;
     }
 
     public List<ProjectTask> getTasksList() {
         return mTasksList;
     }
 
-    public ProjectTask getTask(int position) {
-        return mTasksList.get(position);
+    public ProjectTask getActiveTask() {
+        return mActiveTask;
+    }
+
+    public void setActiveTask(ProjectTask activeTask) {
+        if (activeTask != null) {
+            this.mActiveTask = activeTask;
+            this.mActiveTask.setActive(true);
+            Log.d(TAG, "new current active task = " + mActiveTask.getDescription());
+        }
+
     }
 }

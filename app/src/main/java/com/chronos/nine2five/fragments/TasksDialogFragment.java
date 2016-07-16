@@ -29,23 +29,23 @@ public class TasksDialogFragment extends DialogFragment {
     private static final String TAG = TasksDialogFragment.class.getSimpleName();
 
     private static final String PROJECT_NAME = "projectName";
-    private String mProjectName;
-    private int mSelectedProjectPosittion = -1;
+    private Project mProject;
+    private ProjectTask mOriginalActiveTask;
     private List<ProjectTask> mTasksArray;
-    private int mSelectedTaskPosition = -1;
     private TasksDialogListener mTasksDialogListener;
+
+    private TasksAdapter mTasksAdapter;
 
     public interface TasksDialogListener {
         public void onDialogPositiveClick(DialogFragment dialog);
         public void onDialogNegativeClick(DialogFragment dialog);
     }
 
-    public static TasksDialogFragment newInstance(int selectedProjectPosittion, Project selectedProject) {
+    public static TasksDialogFragment newInstance(Project selectedProject) {
         TasksDialogFragment tasksDialogFragment = new TasksDialogFragment();
-        tasksDialogFragment.setProjectName(selectedProject.getDescription());
+        tasksDialogFragment.setProject(selectedProject);
         tasksDialogFragment.setTasksArray(selectedProject.getTasksList());
-        tasksDialogFragment.setSelectedTaskPosition(selectedProject.getCurrentTaskPosition());
-        tasksDialogFragment.setSelectedProjectPosittion(selectedProjectPosittion);
+        tasksDialogFragment.setOriginalActiveTask(selectedProject.getActiveTask());
         return tasksDialogFragment;
     }
 
@@ -72,13 +72,13 @@ public class TasksDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
 
-        final TasksAdapter adapter = new TasksAdapter(getActivity(), mTasksArray, getSelectedTaskPosition());
+        mTasksAdapter = new TasksAdapter(getActivity(), mTasksArray,mProject);
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.tasks_dialog_layout, null);
         ListView tasksListView = (ListView) dialogView.findViewById(R.id.taskslistView);
         EditText taskToSearch = (EditText) dialogView.findViewById(R.id.editTextTaskSearch);
-        tasksListView.setAdapter(adapter);
+        tasksListView.setAdapter(mTasksAdapter);
 
         taskToSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -87,7 +87,7 @@ public class TasksDialogFragment extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                adapter.getFilter().filter(s);
+                mTasksAdapter.getFilter().filter(s);
             }
 
             @Override
@@ -95,23 +95,22 @@ public class TasksDialogFragment extends DialogFragment {
             }
         });
 
-        dialogBuilder.setTitle(getProjectName() + " - Please select a task");
+        dialogBuilder.setTitle(mProject.getDescription() + " - Please select a task");
         dialogBuilder.setView(dialogView);
 
         // Buttons
         dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                setSelectedTaskPosition(adapter.getSelectedItemPosition());
                 mTasksDialogListener.onDialogPositiveClick(TasksDialogFragment.this);
-                //Toast.makeText(getActivity(), "OK was pressed", Toast.LENGTH_SHORT).show();
             }
         });
         dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                mTasksAdapter.clearAll();
+                mProject.setActiveTask(mOriginalActiveTask);
                 mTasksDialogListener.onDialogNegativeClick(TasksDialogFragment.this);
-                //Toast.makeText(getActivity(), "Cancel was pressed", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -119,12 +118,12 @@ public class TasksDialogFragment extends DialogFragment {
 
     }
 
-    public String getProjectName() {
-        return mProjectName;
+    public Project getProject() {
+        return mProject;
     }
 
-    public void setProjectName(String projectName) {
-        this.mProjectName = projectName;
+    public void setProject(Project project) {
+        this.mProject = project;
     }
 
     public List<ProjectTask> getTasksArray() {
@@ -135,20 +134,8 @@ public class TasksDialogFragment extends DialogFragment {
         this.mTasksArray = tasksArray;
     }
 
-    public int getSelectedTaskPosition() {
-        return mSelectedTaskPosition;
-    }
-
-    public int getSelectedProjectPosittion() {
-        return mSelectedProjectPosittion;
-    }
-
-    public void setSelectedTaskPosition(int selectedTaskPosition) {
-        this.mSelectedTaskPosition = selectedTaskPosition;
-    }
-
-    public void setSelectedProjectPosittion(int selectedProjectPosittion) {
-        this.mSelectedProjectPosittion = selectedProjectPosittion;
+    public void setOriginalActiveTask(ProjectTask originalActiveTask) {
+        this.mOriginalActiveTask = originalActiveTask;
     }
 
     @Override

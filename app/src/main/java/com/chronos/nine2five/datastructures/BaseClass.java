@@ -10,11 +10,13 @@ public abstract class BaseClass {
     private String mCode;
     private String mDescription;
     private Date mExpiryDate;
+    private boolean isActive;
 
     public BaseClass(String mCode, String mDescription) {
         this.mCode = mCode;
         this.mDescription = mDescription;
         this.mExpiryDate = new Date(0);
+        this.isActive = false;
     }
 
     public String getCode() {
@@ -39,6 +41,14 @@ public abstract class BaseClass {
 
     public void setExpiryDate(Date mExpiryDate) {
         this.mExpiryDate = mExpiryDate;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     @Override

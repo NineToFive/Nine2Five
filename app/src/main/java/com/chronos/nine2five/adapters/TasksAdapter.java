@@ -1,6 +1,7 @@
 package com.chronos.nine2five.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.chronos.nine2five.R;
+import com.chronos.nine2five.datastructures.Project;
 import com.chronos.nine2five.datastructures.ProjectTask;
 
 import java.util.List;
@@ -17,11 +19,13 @@ import java.util.List;
  */
 public class TasksAdapter extends BaseItemsAdapter<ProjectTask>{
 
+    private static final String TAG = TasksAdapter.class.getSimpleName();
     private ViewHold holder;
+    private Project mProject;
 
-    public TasksAdapter(Context context, List<ProjectTask> objects, int selectedItemPosition) {
+    public TasksAdapter(Context context, List<ProjectTask> objects, Project project) {
         super(context, objects);
-        setSelectedItemPosition(selectedItemPosition);
+        this.mProject = project;
     }
 
     @Override
@@ -39,7 +43,7 @@ public class TasksAdapter extends BaseItemsAdapter<ProjectTask>{
         ProjectTask item = getItem(position);
         holder.itemView.setText(item.getDescription());
 
-        if (mSelectedItemPosition == position) {
+        if (item.isActive()) {
             holder.radioButton.setChecked(true);
         } else {
             holder.radioButton.setChecked(false);
@@ -50,7 +54,9 @@ public class TasksAdapter extends BaseItemsAdapter<ProjectTask>{
             @Override
             public void onClick(View v)
             {
-                setSelectedItemPosition(position);
+                clearAll();
+                getItem(position).setActive(true);
+                mProject.setActiveTask(getItem(position));
                 TasksAdapter.this.notifyDataSetChanged();
             }
         });

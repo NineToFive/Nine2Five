@@ -19,11 +19,11 @@ import java.util.List;
  */
 public class ProjectsAdapter extends BaseItemsAdapter<Project>{
 
+    private static final String TAG = ProjectsAdapter.class.getSimpleName();
     private ViewHold holder;
 
-    public ProjectsAdapter(Context context, List<Project> objects,int selectedItemPosition) {
+    public ProjectsAdapter(Context context, List<Project> objects) {
         super(context, objects);
-        setSelectedItemPosition(selectedItemPosition);
     }
 
     @Override
@@ -41,7 +41,8 @@ public class ProjectsAdapter extends BaseItemsAdapter<Project>{
         Project project = getItem(position);
         holder.projectView.setText(project.getDescription());
 
-        if (mSelectedItemPosition == position) {
+        //if (mSelectedItemPosition == position) {
+        if (project.isActive()) {
             holder.projectCheckBox.setChecked(true);
         } else {
             holder.projectCheckBox.setChecked(false);
