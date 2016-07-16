@@ -1,5 +1,7 @@
 package com.chronos.nine2five.datastructures;
 
+import java.util.List;
+
 /**
  * Created by user on 09/07/2016.
  */

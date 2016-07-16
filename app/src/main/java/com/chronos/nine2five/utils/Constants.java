@@ -54,4 +54,9 @@ public class Constants {
 
 
     public static final String TASKS_DIALOG = "tasksDialog";
+
+    public static final int INOUT_HEADER_ITEM = 0;
+    public static final int INOUT_RECORD_ITEM = 1;
+    public static final int INOUT_NUMBER_OF_TYPES = 1;
+
 }

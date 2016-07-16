@@ -10,12 +10,12 @@ public class InOutDetails extends InOut {
     private String mProjectCode;
     private String mTaskCode;
 
-    public InOutDetails(String mUserCode, boolean isIn) {
-        super(mUserCode, isIn);
+    public InOutDetails(User user) {
+        super(user);
     }
 
-    public InOutDetails(String mUserCode, boolean isIn, Date mDate) {
-        super(mUserCode, isIn, mDate);
+    public InOutDetails(User user, Date inDate, Date outDate) {
+        super(user, inDate, outDate);
     }
 
     public String getProjectCode() {

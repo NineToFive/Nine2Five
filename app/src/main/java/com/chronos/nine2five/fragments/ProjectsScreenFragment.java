@@ -24,6 +24,7 @@ import java.util.List;
  */
 public class ProjectsScreenFragment extends Fragment {
     private static final String TAG = ProjectsScreenFragment.class.getSimpleName();
+
     private List<Project> mProjectsArray;
     private OnTaskSelectedListener mCallBack;
     private ProjectsAdapter mProjectsAdapter;

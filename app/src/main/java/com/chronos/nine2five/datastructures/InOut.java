@@ -1,52 +1,49 @@
 package com.chronos.nine2five.datastructures;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by user on 09/07/2016.
  */
 public class InOut {
 
-    protected String mUserCode;
-    protected Date mDate;
-    protected boolean isIn;
+    protected User mUser;
+    protected Date mInDate;
+    protected Date mOutDate;
 
-    public InOut(String mUserCode, boolean isIn) {
-        this(mUserCode, isIn, null);
+
+    public InOut(User mUser) {
+        this(mUser, null, null);
     }
 
-    public InOut(String mUserCode, boolean isIn, Date mDate) {
-        this.mUserCode = mUserCode;
-        this.isIn = isIn;
-        if (mDate != null) {
-            this.mDate = mDate;
-        } else {
-            this.mDate = new Date();
-        }
+    public InOut(User mUser, Date inDate, Date outDate) {
+        this.mUser = mUser;
+        this.mInDate = inDate;
+        this.mOutDate = outDate;
     }
 
-    public Date getDate() {
-        return mDate;
+    public Date getInDate() {
+        return mInDate;
     }
 
-    public void setDate(Date date) {
-        this.mDate = date;
+    public void setInDate(Date inDate) {
+        this.mInDate = inDate;
     }
 
-    public String getUserCode() {
-        return mUserCode;
+    public Date getOutDate() {
+        return mOutDate;
     }
 
-    public void setUserCode(String userCode) {
-        this.mUserCode = userCode;
+    public void setOutDate(Date outDate) {
+        this.mOutDate = outDate;
     }
 
-    public boolean isIn() {
-        return isIn;
+    public User getUserCode() {
+        return mUser;
     }
 
-    public void setIn(boolean in) {
-        isIn = in;
+    public void setUserCode(User userCode) {
+        this.mUser = userCode;
     }
+
 }
