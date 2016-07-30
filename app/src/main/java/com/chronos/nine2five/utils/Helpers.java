@@ -12,9 +12,9 @@ public class Helpers {
                 String.format("%02d", (elapsed / 1000 % 60)); // Seconds
     }
 
-    public long calculateDuration(Date in, Date out) {
+    public static long calculateDuration(Date in, Date out) {
         if (in == null || out == null) {
-            return -1L;
+            return 0L;
         } else {
             return out.getTime() - in.getTime();
         }

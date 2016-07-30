@@ -1,5 +1,6 @@
 package com.chronos.nine2five.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -18,6 +19,12 @@ import com.chronos.nine2five.R;
  * Created by user on 16/04/2016.
  */
 public class PunchButtonFragment extends Fragment {
+
+    public interface PunchInOutHandler {
+        void punchIn();
+        void punchOut();
+    }
+
     private static final String TAG = PunchButtonFragment.class.getSimpleName();
 
     private Handler mShiftHandler = new Handler();
@@ -28,6 +35,8 @@ public class PunchButtonFragment extends Fragment {
     private float mFullCircleInMins = 10 * 1000;
 
     private boolean mIsPunchedIn = false;
+
+    private PunchInOutHandler mPunchInOutHandler;
 
     private CircleProgressBar mCircleProgressBar;
     private Button mPunchButton;
@@ -53,13 +62,14 @@ public class PunchButtonFragment extends Fragment {
                     mPunchButton.setText(R.string.punch_in_btn_lbl);
                     mTotalShiftInMillis += mActiveShiftInMillis;
                     mShiftHandler.removeCallbacks(updateTimerThread);
-
+                    mPunchInOutHandler.punchOut();
                 } else {
                     mIsPunchedIn = true;
                     mPunchButton.setText(R.string.punch_out_btn_lbl);
                     mStartShiftInMillis = SystemClock.uptimeMillis();
 
                     mShiftHandler.postDelayed(updateTimerThread, 0);
+                    mPunchInOutHandler.punchIn();
                 }
             }
         });
@@ -92,6 +102,19 @@ public class PunchButtonFragment extends Fragment {
         }
 
     };
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            // Instantiate the NoticeDialogListener so we can send events to the host
+            mPunchInOutHandler = (PunchInOutHandler) context;
+        } catch (ClassCastException e) {
+            // The activity doesn't implement the interface, throw exception
+            throw new ClassCastException(context.toString()
+                    + " must implement PunchInOutHandler");
+        }
+    }
 
     @Override
     public void onDestroy() {

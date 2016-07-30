@@ -57,6 +57,8 @@ public class Constants {
 
     public static final int INOUT_HEADER_ITEM = 0;
     public static final int INOUT_RECORD_ITEM = 1;
-    public static final int INOUT_NUMBER_OF_TYPES = 1;
+    public static final int INOUT_NUMBER_OF_TYPES = 2;
+
+    public static final String DATE_ONLY_FORMAT = "dd/MM/yyyy";
 
 }

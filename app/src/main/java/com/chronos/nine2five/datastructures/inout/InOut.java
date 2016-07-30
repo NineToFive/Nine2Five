@@ -1,4 +1,6 @@
-package com.chronos.nine2five.datastructures;
+package com.chronos.nine2five.datastructures.inout;
+
+import com.chronos.nine2five.datastructures.User;
 
 import java.util.Date;
 

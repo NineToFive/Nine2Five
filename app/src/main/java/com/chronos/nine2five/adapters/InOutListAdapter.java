@@ -4,11 +4,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 
-import com.chronos.nine2five.R;
-import com.chronos.nine2five.datastructures.InOutListItem;
+import com.chronos.nine2five.datastructures.inout.InOutListItem;
 import com.chronos.nine2five.utils.Constants;
 
 import java.util.List;

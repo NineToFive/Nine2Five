@@ -10,6 +10,9 @@ import android.widget.Toast;
 import com.chronos.nine2five.adapters.PagerAdapter;
 import com.chronos.nine2five.adapters.TasksAdapter;
 import com.chronos.nine2five.datastructures.Project;
+import com.chronos.nine2five.datastructures.User;
+import com.chronos.nine2five.datastructures.inout.InOut;
+import com.chronos.nine2five.datastructures.inout.InOutHandler;
 import com.chronos.nine2five.fragments.InOutScreenFragment;
 import com.chronos.nine2five.fragments.PunchButtonFragment;
 import com.chronos.nine2five.fragments.ProjectsScreenFragment;
@@ -20,7 +23,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class FragmentPagerActivity extends AppCompatActivity implements ProjectsScreenFragment.OnTaskSelectedListener,
+public class FragmentPagerActivity extends AppCompatActivity
+        implements ProjectsScreenFragment.OnTaskSelectedListener,
+        PunchButtonFragment.PunchInOutHandler,
         TasksDialogFragment.TasksDialogListener {
 
     private static final String TAG = FragmentPagerActivity.class.getSimpleName();
@@ -28,8 +33,11 @@ public class FragmentPagerActivity extends AppCompatActivity implements Projects
     private static final int PROJECTS_SCREEN_FRAG_POSITION = 1;
     private static final int INOUT_SCREEN_FRAG_POSITION = 2;
 
+    private User mUser;
+    private List<InOut> mInOutList;
     private ViewPager mFragmentPager;
     private PagerAdapter mPagerAdapter;
+    private InOutHandler mInOutHandler;
 
     //// TODO: 09/07/2016 need to enhance the project list to a better data structure
     private List<Project> mProjectsArray = new ArrayList<>();
@@ -40,11 +48,24 @@ public class FragmentPagerActivity extends AppCompatActivity implements Projects
         setContentView(R.layout.activity_fragment_pager);
         setProjectsList();
 
+        setCurrentUser();
+        setInOutList();
+        mInOutHandler = new InOutHandler(mUser, mInOutList);
+
         mPagerAdapter = new PagerAdapter(getSupportFragmentManager(), getList());
         mFragmentPager = (ViewPager) findViewById(R.id.fragment_pager);
-        if (mPagerAdapter != null) {
+        if (mFragmentPager != null) {
             mFragmentPager.setAdapter(mPagerAdapter);
         }
+
+    }
+
+    private void setCurrentUser() {
+        mUser = new User("IXB2", "Green Lemur");
+    }
+
+    private void setInOutList() {
+        mInOutList = new ArrayList<>();
     }
 
     public List<Fragment> getList() {
@@ -53,14 +74,16 @@ public class FragmentPagerActivity extends AppCompatActivity implements Projects
         mListOfFragments.add(mFragment0);
         ProjectsScreenFragment mFragment1 = ProjectsScreenFragment.newInstance(mProjectsArray);
         mListOfFragments.add(mFragment1);
-        InOutScreenFragment mFragment2 = InOutScreenFragment.newInstance();
+        InOutScreenFragment mFragment2 = InOutScreenFragment.newInstance(mInOutHandler.getInOutListItems());
         mListOfFragments.add(mFragment2);
         return mListOfFragments;
     }
 
     @Override
     public void setCurrentTask(String currentTask) {
-        ((PunchButtonFragment) mPagerAdapter.getItem(PUNCH_BUTTON_FRAG_POSITION)).setCurrentTask(currentTask);
+        ((PunchButtonFragment) mPagerAdapter
+                .getItem(PUNCH_BUTTON_FRAG_POSITION))
+                .setCurrentTask(currentTask);
     }
 
     @Override
@@ -84,4 +107,19 @@ public class FragmentPagerActivity extends AppCompatActivity implements Projects
     }
 
 
+    @Override
+    public void punchIn() {
+        mInOutHandler.punchIn();
+        ((InOutScreenFragment) mPagerAdapter.getItem(INOUT_SCREEN_FRAG_POSITION))
+                .setInOutList(mInOutHandler.getInOutListItems());
+    }
+
+    @Override
+    public void punchOut() {
+        mInOutHandler.punchOut();
+        ((InOutScreenFragment) mPagerAdapter.getItem(INOUT_SCREEN_FRAG_POSITION))
+                .setInOutList(mInOutHandler.getInOutListItems());
+        ((InOutScreenFragment) mPagerAdapter.getItem(INOUT_SCREEN_FRAG_POSITION))
+                .getInOutListAdapter().notifyDataSetChanged();
+    }
 }

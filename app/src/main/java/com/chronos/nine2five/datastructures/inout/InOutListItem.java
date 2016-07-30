@@ -1,4 +1,4 @@
-package com.chronos.nine2five.datastructures;
+package com.chronos.nine2five.datastructures.inout;
 
 import android.view.LayoutInflater;
 import android.view.View;
