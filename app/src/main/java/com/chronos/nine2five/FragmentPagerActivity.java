@@ -70,7 +70,7 @@ public class FragmentPagerActivity extends AppCompatActivity
 
     public List<Fragment> getList() {
         List<Fragment> mListOfFragments = new ArrayList<>();
-        PunchButtonFragment mFragment0 = new PunchButtonFragment();
+        PunchButtonFragment mFragment0 = PunchButtonFragment.newInstance(mInOutHandler.getInOutListItems());
         mListOfFragments.add(mFragment0);
         ProjectsScreenFragment mFragment1 = ProjectsScreenFragment.newInstance(mProjectsArray);
         mListOfFragments.add(mFragment1);
@@ -110,16 +110,20 @@ public class FragmentPagerActivity extends AppCompatActivity
     @Override
     public void punchIn() {
         mInOutHandler.punchIn();
-        ((InOutScreenFragment) mPagerAdapter.getItem(INOUT_SCREEN_FRAG_POSITION))
-                .setInOutList(mInOutHandler.getInOutListItems());
+//        ((InOutScreenFragment) mPagerAdapter.getItem(INOUT_SCREEN_FRAG_POSITION))
+//                .setInOutList(mInOutHandler.getInOutListItems());
+//        ((PunchButtonFragment) mPagerAdapter.getItem(PUNCH_BUTTON_FRAG_POSITION))
+//                .setInOutList(mInOutHandler.getInOutListItems());
     }
 
     @Override
     public void punchOut() {
         mInOutHandler.punchOut();
-        ((InOutScreenFragment) mPagerAdapter.getItem(INOUT_SCREEN_FRAG_POSITION))
-                .setInOutList(mInOutHandler.getInOutListItems());
-        ((InOutScreenFragment) mPagerAdapter.getItem(INOUT_SCREEN_FRAG_POSITION))
-                .getInOutListAdapter().notifyDataSetChanged();
+//        ((InOutScreenFragment) mPagerAdapter.getItem(INOUT_SCREEN_FRAG_POSITION))
+//                .setInOutList(mInOutHandler.getInOutListItems());
+//        ((InOutScreenFragment) mPagerAdapter.getItem(INOUT_SCREEN_FRAG_POSITION))
+//                .getInOutListAdapter().notifyDataSetChanged();
+//        ((PunchButtonFragment) mPagerAdapter.getItem(PUNCH_BUTTON_FRAG_POSITION))
+//                .setInOutList(mInOutHandler.getInOutListItems());
     }
 }

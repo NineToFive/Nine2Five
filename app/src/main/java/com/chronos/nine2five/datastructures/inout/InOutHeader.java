@@ -27,22 +27,23 @@ public class InOutHeader implements InOutListItem {
         return Constants.INOUT_HEADER_ITEM;
     }
 
-    @Override
-    public View getView(LayoutInflater inflater, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            convertView = inflater.inflate(R.layout.inout_header_item, parent, false);
-            holder = new ViewHold();
-            holder.textViewDate = (TextView) convertView.findViewById(R.id.txtHeaderDate);
-            holder.textViewTotalDuration = (TextView) convertView.findViewById(R.id.txtHeaderTotalDuration);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHold) convertView.getTag();
-        }
+//    @Override
+//    public View getView(LayoutInflater inflater, View convertView, ViewGroup parent) {
+//        if (convertView == null) {
+//            convertView = inflater.inflate(R.layout.inout_header_item, parent, false);
+//            holder = new ViewHold();
+//            holder.textViewDate = (TextView) convertView.findViewById(R.id.txtHeaderDate);
+//            holder.textViewTotalDuration = (TextView) convertView.findViewById(R.id.txtHeaderTotalDuration);
+//            convertView.setTag(holder);
+//        } else {
+//            holder = (ViewHold) convertView.getTag();
+//        }
+//
+//        holder.textViewDate.setText(mDate);
+//        holder.textViewTotalDuration.setText(mTotalDuration);
+//        return convertView;
+//    }
 
-        holder.textViewDate.setText(mDate);
-        holder.textViewTotalDuration.setText(mTotalDuration);
-        return convertView;
-    }
     private static class ViewHold {
         TextView textViewDate;
         TextView textViewTotalDuration;

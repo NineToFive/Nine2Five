@@ -35,6 +35,7 @@ public class InOutScreenFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View mView = inflater.inflate(R.layout.inout_screen_layout, container, false);
         mInOutListAdapter = new InOutListAdapter(getContext(), mInOutList);
+        // TODO: change name of mTaskListView
         ListView mTasksListView = (ListView) mView.findViewById(R.id.inOutListView);
         mTasksListView.setAdapter(mInOutListAdapter);
         return mView;

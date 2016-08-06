@@ -47,4 +47,36 @@
         android:id="@+id/active_task_duration_txt"
         android:layout_gravity="center_horizontal" />
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="current date"
+            android:id="@+id/textDate"
+            android:layout_weight="1"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="total hours"
+            android:id="@+id/textTotal"
+            android:layout_weight="1"
+            android:textAlignment="center"/>
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listViewTodayInOut"
+        android:layout_gravity="center_horizontal" />
+
+
 </LinearLayout>

@@ -9,11 +9,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chronos.nine2five.CircleProgressBar;
+import com.chronos.nine2five.adapters.InOutListAdapter;
+import com.chronos.nine2five.datastructures.inout.InOutListItem;
 import com.chronos.nine2five.utils.Helpers;
 import com.chronos.nine2five.R;
+
+import java.util.List;
 
 /**
  * Created by user on 16/04/2016.
@@ -43,7 +49,16 @@ public class PunchButtonFragment extends Fragment {
     private TextView mActiveTaskName;
     private TextView mActiveTaskDuration;
 
+    private InOutListAdapter mInOutListAdapter;
+    private List<InOutListItem> mInOutList;
+
     public PunchButtonFragment() {    }
+
+    public static PunchButtonFragment newInstance(List<InOutListItem> inOutList) {
+        PunchButtonFragment punchButtonFragment = new PunchButtonFragment();
+        punchButtonFragment.setInOutList(inOutList);
+        return punchButtonFragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,6 +68,11 @@ public class PunchButtonFragment extends Fragment {
         mActiveTaskName = (TextView) mView.findViewById(R.id.active_task_name_txt);
         mActiveTaskDuration = (TextView) mView.findViewById(R.id.active_task_duration_txt);
         mCircleProgressBar = (CircleProgressBar) mView.findViewById(R.id.CircularProgressBar);
+
+        mInOutListAdapter = new InOutListAdapter(getContext(), mInOutList);
+        ListView mInOutListView = (ListView) mView.findViewById(R.id.listViewTodayInOut);
+        mInOutListView.setAdapter(mInOutListAdapter);
+
 
         mPunchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,13 +87,17 @@ public class PunchButtonFragment extends Fragment {
                     mIsPunchedIn = true;
                     mPunchButton.setText(R.string.punch_out_btn_lbl);
                     mStartShiftInMillis = SystemClock.uptimeMillis();
-
                     mShiftHandler.postDelayed(updateTimerThread, 0);
                     mPunchInOutHandler.punchIn();
                 }
+                refreshInOutList();
             }
         });
         return mView;
+    }
+
+    private void refreshInOutList() {
+        mInOutListAdapter.notifyDataSetChanged();
     }
 
     public boolean isPunchedIn() {
@@ -107,7 +131,6 @@ public class PunchButtonFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            // Instantiate the NoticeDialogListener so we can send events to the host
             mPunchInOutHandler = (PunchInOutHandler) context;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
@@ -125,5 +148,13 @@ public class PunchButtonFragment extends Fragment {
 
     public void setCurrentTask(String currentTask) {
         mActiveTaskName.setText(currentTask);
+    }
+
+    public List<InOutListItem> getInOutList() {
+        return mInOutList;
+    }
+
+    public void setInOutList(List<InOutListItem> inOutList) {
+        this.mInOutList = inOutList;
     }
 }

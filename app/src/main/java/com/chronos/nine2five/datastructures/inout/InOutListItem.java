@@ -9,5 +9,5 @@ import android.view.ViewGroup;
  */
 public interface InOutListItem {
     public int getViewType();
-    public View getView(LayoutInflater inflater, View convertView, ViewGroup parent);
+//    public View getView(LayoutInflater inflater, View convertView, ViewGroup parent);
 }
